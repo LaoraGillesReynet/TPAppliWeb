@@ -1,1 +1,1 @@
-web: java -jar target/demo-0.0.1-SNAPSHOT.jar --server.port=$PORT --spring.profiles.active=DEV
+web: java -jar target/TPAppliWeb-0.0.1-SNAPSHOT.jar --server.port=$PORT --spring.profiles.active=DEV
