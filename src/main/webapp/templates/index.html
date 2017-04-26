@@ -1,0 +1,214 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title> Polytech Net</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+
+    <style >
+        @import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+        .login-page {
+            width: 800px;
+            padding: 8% 0 0;
+            margin: auto;
+        }
+        .login-page h1 {
+            font-family: "Roboto", sans-serif;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        .form {
+            position: relative;
+            z-index: 1;
+            background: #FFFFFF;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            padding: 45px;
+            text-align: center;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+        .row-post{
+            position: relative;
+            z-index: 1;
+            background: #FFFFFF;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            padding: 30px;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+        .form input {
+            font-family: "Roboto", sans-serif;
+            outline: 0;
+            background: #f2f2f2;
+            width: 100%;
+            border: 0;
+            margin: 0 0 15px;
+            padding: 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .form button {
+            font-family: "Roboto", sans-serif;
+            text-transform: uppercase;
+            outline: 0;
+            background: #4CAF50;
+            width: 20%;
+            border: 0;
+            padding: 15px;
+            color: #FFFFFF;
+            font-size: 14px;
+            -webkit-transition: all 0.3 ease;
+            transition: all 0.3 ease;
+            cursor: pointer;
+        }
+        .form button:hover,.form button:active,.form button:focus {
+            background: #43A047;
+        }
+        .form .message a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .container .info h1 {
+            margin: 0 0 15px;
+            padding: 0;
+            font-size: 36px;
+            font-weight: 300;
+            color: #1a1a1a;
+        }
+        .panel-header{
+            background: #4CAF50;
+            text-align: center;
+            color: white;
+            padding: 5px;
+        }
+        .panel-body-1{
+            background: #4CAF50;
+            color: white;
+            padding: 5px;
+        }
+        .panel-body{
+            border-color: #4CAF50;
+            border-style: solid;
+        }
+        .panel-footer{
+            background: white;
+        }
+        .form-comment input{
+            font-family: "Roboto", sans-serif;
+            outline: 0;
+            background: #f2f2f2;
+            border: 0;
+            margin: 0 0 15px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .btn{
+            font-family: "Roboto", sans-serif;
+            text-transform: uppercase;
+            background: #4CAF50;
+            color: #FFFFFF;
+            -webkit-transition: all 0.3 ease;
+            transition: all 0.3 ease;
+            cursor: pointer;
+        }
+
+        body {
+            background: #76b852; /* fallback for old browsers */
+            background: -webkit-linear-gradient(right, #76b852, #8DC26F);
+            background: -moz-linear-gradient(right, #76b852, #8DC26F);
+            background: -o-linear-gradient(right, #76b852, #8DC26F);
+            background: linear-gradient(to left, #76b852, #8DC26F);
+        }
+    </style>
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+    var refresh = function(win, doc){
+        win.location = doc.location.href.substring(0, ( doc.location.href.lastIndexOf('/')));
+    }
+
+    var like = function(element){
+        $.get(decodeURIComponent('/likes?id=' + $(element).attr('id')), function( data ) {
+            console.log(data);
+           refresh(window, document);
+        }, "text");
+      //  refresh(window, document);
+    }
+
+    var postComment = function(content, id){
+        $.get(decodeURIComponent('/comment?id=' + id  + "%26content=" + content ), function( data ) {
+
+           console.log(data);
+            refresh(window, document);
+            $('#comments' + id).attr('class', 'commentsShow');
+        }, "text");
+    }
+
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
+
+<div class ="logout">
+    <a class="btn" href="/logout">Se déconnecter</a>
+</div>
+<div class="login-page">
+    <h1>POLYTECH NET</h1>
+    <div class="form">
+        <form method="post" th:action="@{/}">
+            <input type="text" name="content" id="content" placeholder="Post something"/>
+            <button type="submit" class="btn btn-primary|secondary|success|info|warning|danger">Submit</button>
+        </form>
+    </div>
+
+    <div th:each="post,iterStat : ${posts}" class="row-post">
+        <div class="panel-header">
+            <h3 class="panel-title">POST  <span th:text="${post.id}"></span></h3>
+        </div>
+        <div class="panel-body">
+            <div class="ss-panel-body" th:text="${post.content}">
+                Post Content Here
+            </div>
+            <i><small>Author <b th:text="${post.author}"></b></small> </i>
+        </div>
+        <div class="panel-body-1">
+            <span th:text="${post.getLikes().size()}"></span> Likes -  <span th:text="${post.getComments().size()}"></span> Comments
+        </div>
+        <div class="panel-footer">
+
+             <b><a class="btn btn-success" onclick="like(this);" th:id="${post.id}" th:href="@{'#' + ${post.id}}">Like</a></b>
+             <hr/>
+
+             <div class="comments" th:id="@{'comments' + ${post.id}}">
+                  <div th:each="comment,iterStatComment : ${post.getComments()}"><b th:text="${comment.getAUTHOR().getUsername()}">PSEUDO
+                  </b>
+                      <span th:text="${comment.getCONTENT()}">Content blabla</span>
+                  </div>
+                  <div class="form-comment">
+                      <form action="#">
+                          <input th:id="@{'newComment' + ${post.id}}" type="text" size="50"/>
+                          <button  th:onclick="@{'postComment($(\'#newComment' + ${post.id} + '\').val(), \'' + ${post.id} + '\')'}"  class="btn">Comment</button>
+                      </form>
+                  </div>
+              </div>
+        </div>
+    </div>
+</div>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</body>
+</html>
